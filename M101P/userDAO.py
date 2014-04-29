@@ -54,8 +54,6 @@ class UserDAO:
         user = None
         try:
             user = self.users.find_one({'_id': username})
-    
-            print "This space intentionally left blank."
         except:
             print "Unable to query database for user"
 
@@ -82,9 +80,7 @@ class UserDAO:
             user['email'] = email
 
         try:
-            self.users.insert(user)
-            print "This space intentionally left blank."
-
+            self.users.insert(user, safe=True)
         except pymongo.errors.OperationFailure:
             print "oops, mongo error"
             return False
