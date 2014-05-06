@@ -64,7 +64,8 @@ class BlogPostDAO:
 
     # returns an array of num_posts posts, reverse ordered
     def get_posts(self, num_posts):
-
+        
+        #index : db.posts.ensureIndex({date : -1})
         cursor = self.posts.find().sort('date', direction=-1).limit(num_posts)
         l = []
 
@@ -86,6 +87,7 @@ class BlogPostDAO:
     # returns an array of num_posts posts, reverse ordered, filtered by tag
     def get_posts_by_tag(self, tag, num_posts):
 
+        #index : db.posts.ensureIndex({tags : 1, date : -1}, {spare : true})
         cursor = self.posts.find({'tags':tag}).sort('date', direction=-1).limit(num_posts)
         l = []
 
@@ -107,6 +109,7 @@ class BlogPostDAO:
     # find a post corresponding to a particular permalink
     def get_post_by_permalink(self, permalink):
 
+        #index : db.posts.ensureIndex({permalink : 1})
         post = self.posts.find_one({'permalink': permalink})
 
         if post is not None:
