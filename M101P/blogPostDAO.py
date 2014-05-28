@@ -64,8 +64,7 @@ class BlogPostDAO:
 
     # returns an array of num_posts posts, reverse ordered
     def get_posts(self, num_posts):
-        
-        #index : db.posts.ensureIndex({date : -1})
+
         cursor = self.posts.find().sort('date', direction=-1).limit(num_posts)
         l = []
 
@@ -87,7 +86,6 @@ class BlogPostDAO:
     # returns an array of num_posts posts, reverse ordered, filtered by tag
     def get_posts_by_tag(self, tag, num_posts):
 
-        #index : db.posts.ensureIndex({tags : 1, date : -1}, {spare : true})
         cursor = self.posts.find({'tags':tag}).sort('date', direction=-1).limit(num_posts)
         l = []
 
@@ -109,11 +107,15 @@ class BlogPostDAO:
     # find a post corresponding to a particular permalink
     def get_post_by_permalink(self, permalink):
 
-        #index : db.posts.ensureIndex({permalink : 1})
         post = self.posts.find_one({'permalink': permalink})
 
+        # XXX Final exam Question 4
+        # 
+        # if you store the likes value in the way the template expects
+        # and how is implied by by the fixup code below, you don't need to make a change here
+
         if post is not None:
-            # fix up likes values. set to zero if data is not present
+            # fix up likes values. set to zero if data is not present for comments that have never been liked
             for comment in post['comments']:
                 if 'num_likes' not in comment:
                     comment['num_likes'] = 0
@@ -142,6 +144,16 @@ class BlogPostDAO:
             print "Unexpected error:", sys.exc_info()[0]
             return 0
 
+    # increments the number of likes on a particular comment. Returns the number of documented updated
+    def increment_likes(self, permalink, comment_ordinal):
+
+        #
+        # XXX Final exam 
+        # Work here. You need to update the num_likes value in the comment being liked
+        # 
+        
+
+        return 0
 
 
 
