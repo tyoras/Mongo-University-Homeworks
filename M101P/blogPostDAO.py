@@ -147,18 +147,22 @@ class BlogPostDAO:
     # increments the number of likes on a particular comment. Returns the number of documented updated
     def increment_likes(self, permalink, comment_ordinal):
 
-        #
-        # XXX Final exam 
-        # Work here. You need to update the num_likes value in the comment being liked
-        # 
-        
+        post = self.posts.find_one({'permalink': permalink})
+ 
+        if post is not None:
+            # fix up likes values. set to zero if data is not present for comments that have never been liked
+            comment = post['comments'][comment_ordinal]
+            if 'num_likes' not in comment:
+                comment['num_likes'] = 0
+            else:
+                comment['num_likes'] = comment['num_likes']+1
+ 
+            try:
+                self.posts.save(post)
+            except:
+                print "Could not update the collection, error"
+            print "Unexpected error:", sys.exc_info()[0]
+            return 0
+        return post
 
         return 0
-
-
-
-
-
-
-
-
